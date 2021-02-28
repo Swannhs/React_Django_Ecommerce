@@ -5,27 +5,50 @@ class Products extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: '',
-            name: '',
-            image: '',
-            description: '',
-            band: '',
-            category: '',
-            price: 0,
-            countInStock: 0,
-            rating: 0,
-            numReviews: 0
+            data: []
         }
     }
 
     componentDidMount() {
         DjangoApi.get('/products/')
-            .then(response => console.log(response))
+            .then(response => {
+                this.setState({
+                    data: response.data
+                })
+                console.log(response.data)
+            })
     }
 
     render() {
         return (
-            <></>
+            <>
+                {
+                    this.state.data.map((item) => {
+                        return (
+                            <div className="ui card">
+                                <div className="image">
+                                    <img src={'http://127.0.0.1:8000' + item.image}/>
+                                </div>
+                                <div className="content">
+                                    <a className="header">{item.name}</a>
+                                    <div className="meta">
+                                        <span className="date">Joined in 2013</span>
+                                    </div>
+                                    <div className="description">
+                                        {item.description}
+                                    </div>
+                                </div>
+                                <div className="extra content">
+                                    <a>
+                                        <i className="user icon"/>
+                                        22 Friends
+                                    </a>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+            </>
         );
     }
 }
